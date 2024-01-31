@@ -1,47 +1,48 @@
 <?php
 
-if($_GET['Hash'])
+#------------ MD5 HASH Decrypter -------------#
+
+#--- Get Data ---#
+
+if(isset($_REQUEST['Hash']))
 {
-    MD5_Hash_Decrypter($_GET['Hash']);
+    MD5_Hash_API($_REQUEST['Hash']);
 }
 
-#------------ HASH Decrypter -------------#
+#--- Get Data ---#
 
-function MD5_Hash_Decrypter($Hash)
-{
-    $headers = array(
-        'Content-Type:application/json'.
-        'Host:bluecode.info',
-        'User-Agent:MD5 LITE 2.4.3'
-    );
+#--- Check Data ---#
+function MD5_Hash_API($Hash) {
 
-    $MD5_REQ = curl_init();
-    curl_setopt($MD5_REQ, CURLOPT_URL, 'https://bluecode.info/md5api/?search%5B%5D='.$Hash.'&');
-    curl_setopt($MD5_REQ, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($MD5_REQ, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($MD5_REQ, CURLOPT_CUSTOMREQUEST, 'GET' );
-    curl_setopt($MD5_REQ, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-    $Resopone = curl_exec($MD5_REQ);
-    
-    if(strpos($Resopone , $Hash))
-    {
-        $Result = json_decode($Resopone , true) [$Hash];
-        echo(json_encode(array(
-            'Error' => 'false' ,
-            'Hash' => $Hash ,
-            'Result' => $Result ,
-            'Developer' => 'AGC007'
-            )));
-    }
-    else{
-        echo(json_encode(array(
-            'error' => 'true' ,
-            'errorType' => 'Hash iS Not Decrypted :(' , 
-            'Developer' => 'AGC007'
-            )));
-    }
+    $API_RES = file_get_contents("https://www.nitrxgen.net/md5db/".strtolower($Hash).".json");
+    $RES_JSON = json_decode($API_RES , true);
+
+     $RES_Status = $RES_JSON['result']['found'];
+
+     if($RES_Status == "true") {
+         $RES_Hash = $RES_JSON['result']['hash'];
+         $RES_Response = $RES_JSON['result']['pass'];
+         $RES_HexResponse = $RES_JSON['result']['hexpass'];
+         $RES_Hits = $RES_JSON['result']['hits'];
+
+         echo(json_encode(array(
+            'Found' => $RES_Status ,
+            'Hash' => $RES_Hash ,
+            'Response' => $RES_Response ,
+             'Developer' => 'AGC007'
+         )));
+     }
+     else {
+         echo(json_encode(array(
+             'Found' => $RES_Status,
+             'Hash' => null,
+             'Response' => null ,
+             'Developer' => 'AGC007'
+         )));
+     }
 }
 
-#------------ HASH Decrypter -------------#
+#--- Check Data ---#
 
+#------------ MD5 HASH Decrypter -------------#
 ?>
