@@ -28,15 +28,15 @@ function MD5_Hash_API($Hash) {
          echo(json_encode(array(
             'Found' => $RES_Status ,
             'Hash' => $RES_Hash ,
-            'Response' => $RES_Response ,
-             'Developer' => 'AGC007'
+            'Result' => $RES_Response ,
+            'Developer' => 'AGC007'
          )));
      }
      else {
          echo(json_encode(array(
              'Found' => $RES_Status,
              'Hash' => null,
-             'Response' => null ,
+             'Result' => null ,
              'Developer' => 'AGC007'
          )));
      }
